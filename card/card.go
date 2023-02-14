@@ -78,16 +78,15 @@ func DefaultSort(cards []Card) []Card {
 	return cards
 }
 
-// Sort
+// Sort 
 func Sort(less func(cards []Card) func(i, j int) bool) func([]Card) []Card {
 	return func(c []Card) []Card {
 		sort.Slice(c, less(c))
 		return c
 	}
-
 }
 
-// Less
+// Less 
 func Less(cards []Card) func(i, j int) bool {
 	return func(i, j int) bool {
 		return absRank(cards[i]) < absRank(cards[j])
@@ -115,6 +114,30 @@ func Jokers(n int) func([]Card) []Card {
 			})
 		}
 		return cards
+	}
+}
+
+// Filter 
+func Filter(f func(card Card) bool) func([]Card) []Card {
+	return func(c []Card) []Card {
+		var ret []Card
+		for _, card := range c {
+			if !f(card) {
+				ret = append(ret, card)
+			}
+		}
+		return ret
+	}
+}
+
+// Deck
+func Deck(n int) func([]Card) []Card {
+	return func(c []Card) []Card {
+		var ret []Card
+		for i := 0; i < n; i++ {
+			ret = append(ret, c...)
+		}
+		return ret
 	}
 }
 
