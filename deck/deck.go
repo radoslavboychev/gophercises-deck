@@ -1,5 +1,3 @@
-//go:generate stringer -type=Suit,Rank
-
 package deck
 
 import (
@@ -72,13 +70,7 @@ func New(opts ...func([]Card) []Card) []Card {
 	return cards
 }
 
-// Default sorting using the sort package
-func DefaultSort(cards []Card) []Card {
-	sort.Slice(cards, Less(cards))
-	return cards
-}
-
-// Sort 
+// Sort
 func Sort(less func(cards []Card) func(i, j int) bool) func([]Card) []Card {
 	return func(c []Card) []Card {
 		sort.Slice(c, less(c))
@@ -86,7 +78,13 @@ func Sort(less func(cards []Card) func(i, j int) bool) func([]Card) []Card {
 	}
 }
 
-// Less 
+// Default sorting using the sort package
+func DefaultSort(cards []Card) []Card {
+	sort.Slice(cards, Less(cards))
+	return cards
+}
+
+// Less
 func Less(cards []Card) func(i, j int) bool {
 	return func(i, j int) bool {
 		return absRank(cards[i]) < absRank(cards[j])
@@ -117,7 +115,7 @@ func Jokers(n int) func([]Card) []Card {
 	}
 }
 
-// Filter 
+// Filter
 func Filter(f func(card Card) bool) func([]Card) []Card {
 	return func(c []Card) []Card {
 		var ret []Card
